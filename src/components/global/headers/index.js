@@ -1,28 +1,32 @@
-import axios from 'axios';
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ContextHook } from '../../../ContextHook';
-import AppBar from '@mui/material/AppBar';
+import MenuIcon from '@mui/icons-material/Menu';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+// import AppBar from '@mui/material/AppBar';
+import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
-import Cart from './icon/cart.svg';
-import Close from './icon/close.svg';
-import Menu from './icon/menu.svg';
-
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import React, { useContext, useState } from 'react';
+import { styled, useTheme } from '@mui/material/styles';
+import MuiAppBar from '@mui/material/AppBar';
+import { Link } from 'react-router-dom';
+import { ContextHook } from '../../../ContextHook';
+import DrawerNavbar from '../../commonComponents/DrawerNavbar';
+import { CssBaseline } from '@mui/material';
+const drawerWidth = 240;
 function Header() {
     const state = useContext(ContextHook);
     const [isLogged] = state.userAPI.isLogged;
     const [isAdmin] = state.userAPI.isAdmin;
     const [cart] = state.userAPI.cart;
-    const [menu, setMenu] = useState(false);
     const [userr] = state.userAPI.userr;
+    const [openDrawer, setOpenDrawer] = state.drawer;
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -47,15 +51,36 @@ function Header() {
     const adminRouter = () => {
         return (
             <>
-                <li>
-                    <Link to="/create_product">Thêm sản phẩm</Link>
-                </li>
-                <li>
-                    <Link to="/category">Danh mục</Link>
-                </li>
+                <Link to="/create_product">
+                    <Button style={{ lineHeight: 'inherit' }} color="inherit">
+                        Thêm sản phẩm
+                    </Button>
+                </Link>
+                <Link to="/category">
+                    <Button style={{ lineHeight: 'inherit' }} color="inherit">
+                        Danh mục
+                    </Button>
+                </Link>
             </>
         );
     };
+
+    const AppBar = styled(MuiAppBar, {
+        shouldForwardProp: (prop) => prop !== 'open',
+    })(({ theme, open }) => ({
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        ...(open && {
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: `${drawerWidth}px`,
+            transition: theme.transitions.create(['margin', 'width'], {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        }),
+    }));
 
     const userLink = () => {
         return (
@@ -74,92 +99,105 @@ function Header() {
                     anchorEl={anchorEl}
                     onClose={handleClose}
                 >
-                    <Stack direction="column" spacing={0} alignItems="center">
-                        <Button color="inherit" className="popover__header" onClick={handleClose}>
-                            <Link className="popover__text" to="/profile">
+                    <Stack
+                        style={{
+                            top: 50,
+                            right: 28,
+                        }}
+                        direction="column"
+                        spacing={0}
+                        alignItems="center"
+                    >
+                        <Link className="popover__text" to="/profile">
+                            <Button
+                                style={{ lineHeight: 'inherit' }}
+                                color="inherit"
+                                className="popover__header"
+                                onClick={handleClose}
+                            >
                                 Thông tin
-                            </Link>
-                        </Button>
-                        <Button color="inherit" className="popover__header" onClick={handleClose}>
-                            <Link className="popover__text" to="/" onClick={logoutUser}>
+                            </Button>
+                        </Link>
+                        <Link className="popover__text" to="/" onClick={logoutUser}>
+                            <Button
+                                style={{ lineHeight: 'inherit' }}
+                                color="inherit"
+                                className="popover__header"
+                                onClick={handleClose}
+                            >
                                 Đăng xuất
-                            </Link>
-                        </Button>
+                            </Button>
+                        </Link>
                     </Stack>
                 </Popover>
-                <div className="avatar" onClick={handleClick}>
-                    <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Avatar sx={{ width: 32, height: 32 }} alt="avatar" src={userr.avatar} />
-                        <Typography aria-haspopup="true" style={{ fontSize: '.9rem' }}>
-                            {userr.name} <i className="fas fa-angle-down"></i>
-                        </Typography>
-                    </Stack>
-                </div>
+                <Stack direction="row">
+                    <Button style={{ lineHeight: 'inherit' }} color="inherit">
+                        <Link to="/">{isAdmin ? 'Sản phẩm' : 'Cửa hàng'}</Link>
+                    </Button>
+                    {isAdmin && adminRouter()}
+                    <div className="avatar" aria-describedby={id} onClick={handleClick}>
+                        <Stack direction="row" spacing={0.5} alignItems="center">
+                            <Avatar sx={{ width: 32, height: 32 }} alt="avatar" src={userr.avatar} />
+                            <Typography aria-haspopup="true" style={{ fontSize: '.9rem' }}>
+                                {userr.name} <i className="fas fa-angle-down"></i>
+                            </Typography>
+                        </Stack>
+                    </div>
+                </Stack>
+                {isAdmin ? (
+                    ''
+                ) : (
+                    <Tooltip title="Giỏ hàng" placement="top">
+                        <Link to="/cart" className="cart-icon">
+                            <Badge color="info" badgeContent={cart.length}>
+                                <ShoppingCartOutlinedIcon />
+                            </Badge>
+                        </Link>
+                    </Tooltip>
+                )}
             </>
         );
     };
 
-    const transForm = {
-        transform: isLogged ? 'translateY(-5px)' : 0,
-        left: menu ? 0 : '-100%',
+    const handleOpen = () => {
+        setOpenDrawer(!openDrawer);
     };
+
     return (
         <header>
-            {/* <div className="menu" onClick={() => setMenu(!menu)}>
-                <img src={Menu} alt="menu" width="30" />
-            </div>
-            <div className="logo">
-                <h1>
-                    <Link to="/">{isAdmin ? 'Admin' : 'SHOPC4'}</Link>
-                </h1>
-            </div>
-            <ul style={transForm}>
-                <li>
-                    <Link to="/">{isAdmin ? 'Sản phẩm' : 'Cửa hàng'}</Link>
-                </li>
-                {isAdmin && adminRouter()}
-
-                {isLogged ? (
-                    userLink()
-                ) : (
-                    <li>
-                        <Link to="/login">
-                            <i className="fas fa-user"></i> Đăng nhập
-                        </Link>
-                    </li>
-                )}
-
-                <li onClick={() => setMenu(!menu)}>
-                    <img src={Close} alt="close" width="30" className="menu" />
-                </li>
-            </ul>
-            {isAdmin ? (
-                ''
-            ) : (
-                <div className="cart-icon">
-                    <span>{cart.length}</span>
-                    <Link to="/cart">
-                        <img src={Cart} alt="cart" width="30" />
-                    </Link>
-                </div>
-            )} */}
             <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
+                <CssBaseline />
+                <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                     <Toolbar>
-                        <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleOpen}
+                            edge="start"
+                            sx={{ mr: 2 }}
+                        >
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            News
+                            <div className="logo">
+                                <Link to="/">{isAdmin ? 'Admin' : 'SHOPC4'}</Link>
+                            </div>
                         </Typography>
                         {isLogged ? (
                             userLink()
                         ) : (
-                            <Button color="inherit">
-                                <Link to="/login">
-                                    <i className="fas fa-user"></i> Đăng nhập
+                            <Stack space={1} direction="row">
+                                <Link to="/">
+                                    <Button style={{ lineHeight: 'inherit' }} color="inherit">
+                                        {isAdmin ? 'Sản phẩm' : 'Cửa hàng'}
+                                    </Button>
                                 </Link>
-                            </Button>
+                                <Link to="/login">
+                                    <Button style={{ lineHeight: 'inherit' }} color="inherit">
+                                        Đăng nhập
+                                    </Button>
+                                </Link>
+                            </Stack>
                         )}
                     </Toolbar>
                 </AppBar>

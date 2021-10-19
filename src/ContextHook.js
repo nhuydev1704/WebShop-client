@@ -10,6 +10,7 @@ export const ContextHook = createContext();
 export const DataProvider = ({ children }) => {
     const [token, setToken] = useState(false);
     const [socket, setSocket] = useState(null);
+    const [openDrawer, setOpenDrawer] = useState(true);
 
     useEffect(() => {
         const firstLogin = localStorage.getItem('firstLogin');
@@ -38,6 +39,7 @@ export const DataProvider = ({ children }) => {
         productsAPI: ProductsAPI(),
         userAPI: UserAPI(token),
         categoriesAPI: CategoriesAPI(),
+        drawer: [openDrawer, setOpenDrawer],
         socket,
     };
     return <ContextHook.Provider value={state}>{children}</ContextHook.Provider>;

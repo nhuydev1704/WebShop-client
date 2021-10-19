@@ -28,7 +28,7 @@
     flex-direction: column;
 }
 
-.box-detail .row span{
+.box-detail .row span {
     padding-top: 10px;
     border-bottom: 1px solid;
     color: #00ffd0a6;
@@ -61,17 +61,17 @@
     max-width: 180px;
     border-radius: 10px;
     font-weight: 500;
-    transition: all ease-in-out .1s;
-} 
+    transition: all ease-in-out 0.1s;
+}
 
 .box-detail .cart:hover {
     background-color: rgb(35, 131, 26);
     color: rgb(21, 20, 20);
-    opacity: .8;
+    opacity: 0.8;
 }
 
 .rating i {
-    color: crimson;
+    color: rgb(253, 216, 54);
     margin: 5px 0;
     padding-right: 5px;
     cursor: pointer;
@@ -85,12 +85,12 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 160px;
+    /* width: 160px; */
     overflow: hidden;
 }
 
 /* css review */
-.comments h2{
+.comments h2 {
     text-align: center;
     border-bottom: 1px solid;
     padding-bottom: 10px;
@@ -115,7 +115,6 @@
     margin: 5px 0;
     padding-right: 5px;
     cursor: pointer;
-    
 }
 
 .reviews input:not(:checked) ~ label:hover,
@@ -126,7 +125,6 @@
 .reviews input:checked ~ label {
     color: crimson;
 }
-
 
 /* css input form */
 .form_input {
@@ -154,11 +152,11 @@
 }
 
 .form_input button:hover {
-    opacity: .8;
+    opacity: 0.8;
 }
 
 /* css comment */
-.comments_list{
+.comments_list {
     margin-bottom: 20px;
 }
 
@@ -186,7 +184,6 @@
 
 .comment_card span {
     margin-right: 10px;
-
 }
 
 .comment_card p {
@@ -200,14 +197,14 @@
     flex-wrap: wrap;
 }
 
-.comment_card .nav_comment p{
+.comment_card .nav_comment p {
     color: orangered;
     padding-right: 10px;
     text-transform: capitalize;
     cursor: pointer;
 }
 
-.comment_card .nav_comment p:hover{
+.comment_card .nav_comment p:hover {
     text-decoration: underline;
 }
 
@@ -216,7 +213,6 @@
 .reply_comment {
     margin-left: 20px;
 }
-
 
 .repleated-product {
     border-bottom: 1px solid;

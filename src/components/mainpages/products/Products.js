@@ -17,8 +17,17 @@ import React, { useContext, useState } from 'react';
 import { ContextHook } from '../../../ContextHook';
 import Loading from '../ultils/loading/Loading';
 import ProductItem from '../ultils/ProductItem/ProductItem';
+import { useSnackbar } from 'notistack';
+import Favorite from '@mui/icons-material/Favorite';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Button from '@mui/material/Button';
 const drawerWidth = 240;
-function Products() {
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+function Products(props) {
+    const { enqueueSnackbar } = useSnackbar();
+
     const state = useContext(ContextHook);
     const [products, setProducts] = state.productsAPI.products;
     const [openDrawer, setOpenDrawer] = state.drawer;
@@ -58,9 +67,15 @@ function Products() {
             setCallback(!callback);
             setLoading(false);
 
-            alert('Xóa thành công.');
+            enqueueSnackbar('Xóa thành công.', {
+                variant: 'success',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
         } catch (err) {
-            alert(err.response.data.msg);
+            alert(err?.response?.data?.msg);
         }
     };
 
@@ -91,7 +106,7 @@ function Products() {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        marginLeft: `-${drawerWidth}px`,
+        marginLeft: `-${216}px`,
         ...(open && {
             transition: theme.transitions.create('margin', {
                 easing: theme.transitions.easing.easeOut,
@@ -139,16 +154,43 @@ function Products() {
                 <Divider />
                 <List>
                     {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
+                        <ListItem button key={index}>
                             <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItem>
                     ))}
                 </List>
+                <Divider />
+                {isAdmin && (
+                    <List>
+                        {[
+                            <FormControlLabel
+                                style={{ paddingLeft: '10px' }}
+                                label="Chọn tất cả"
+                                control={
+                                    <Checkbox
+                                        checked={isCheck}
+                                        {...label}
+                                        style={{ display: 'none' }}
+                                        onChange={checkAll}
+                                    />
+                                }
+                            />,
+                            <span style={{ fontSize: '1.05rem', fontWeight: 400 }} onClick={deleteAll}>
+                                Xóa tất cả
+                            </span>,
+                        ].map((text, index) => (
+                            <ListItem button key={index}>
+                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItem>
+                        ))}
+                    </List>
+                )}
             </Drawer>
             <Main open={openDrawer}>
                 <DrawerHeader />
-                <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
+                <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={1}>
                     {(loadingProduct || loading ? Array.from(new Array(8)) : products).map((product, index) => {
                         return (
                             <Grid key={index} item md={3}>

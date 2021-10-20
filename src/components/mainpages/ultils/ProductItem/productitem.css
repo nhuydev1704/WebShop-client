@@ -4,7 +4,7 @@
     display: block;
     border-radius: 4px;
     object-fit: cover;
-    transition: all ease-in 0.15s;
+    transition: all ease-in 0.05s;
     transform: scale(0.8);
 }
 
@@ -102,4 +102,14 @@
     top: 0;
     left: 0;
     cursor: pointer;
+}
+
+.button_ud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkbox_product {
+    float: right;
 }

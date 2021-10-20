@@ -2,12 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import DataProvider from './redux/store';
+import { SnackbarProvider } from 'notistack';
+import { DataProvider } from './ContextHook';
 
 ReactDOM.render(
     <React.StrictMode>
         <DataProvider>
-            <App />
+            <SnackbarProvider
+                maxSnack={3}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+            >
+                <DataProvider>
+                    <App />
+                </DataProvider>
+            </SnackbarProvider>
         </DataProvider>
     </React.StrictMode>,
     document.getElementById('root')

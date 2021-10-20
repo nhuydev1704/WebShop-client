@@ -1,13 +1,28 @@
-import { Grid } from '@mui/material';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import Checkbox from '@mui/material/Checkbox';
 import React from 'react';
 import Rating from '../../detailProduct/rating/Rating';
 import BtnRender from './BtnRender';
 
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 function ProductItem({ product, isAdmin, deleteProduct, handleChangeInput }) {
     return (
         <>
+            {/* <input
+                    className="checkbox_product"
+                    type="checkbox"
+                    
+                /> */}
             {isAdmin && (
-                <input type="checkbox" checked={product.checked} onChange={() => handleChangeInput(product._id)} />
+                <Checkbox
+                    className="checkbox_product"
+                    checked={product.checked}
+                    onChange={() => handleChangeInput(product._id)}
+                    {...label}
+                    icon={<BookmarkBorderIcon />}
+                    checkedIcon={<BookmarkIcon />}
+                />
             )}
             <img className="img_product" src={product.images.url} alt="" />
             <div className="product_box">

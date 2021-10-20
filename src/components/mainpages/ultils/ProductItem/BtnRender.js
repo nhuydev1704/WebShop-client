@@ -1,3 +1,5 @@
+import { Grid } from '@mui/material';
+import Button from '@mui/material/Button';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ContextHook } from '../../../../ContextHook';
@@ -10,21 +12,23 @@ function BtnRender({ product, deleteProduct }) {
     return (
         <div className="row_btn">
             {isAdmin ? (
-                <>
-                    <Link id="btn_buy" to="#!" onClick={() => deleteProduct(product._id, product.images.public_id)}>
+                <div className="button_ud">
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        onClick={() => deleteProduct(product._id, product.images.public_id)}
+                    >
                         Xóa
+                    </Button>
+                    <Link to={`/edit_product/${product._id}`}>
+                        <Button variant="contained">Sửa</Button>
                     </Link>
-                    <Link id="btn_view" to={`/edit_product/${product._id}`}>
-                        Sửa
-                    </Link>
-                </>
+                </div>
             ) : (
                 <>
-                    <Link id="btn_buy" to="#!" onClick={() => addCart(product)}>
-                        Mua
-                    </Link>
-                    <Link id="btn_view" to={`/detail/${product._id}`}>
-                        Xem
+                    <Button onClick={() => addCart(product)}>Mua</Button>
+                    <Link to={`/detail/${product._id}`}>
+                        <Button>Xem</Button>
                     </Link>
                 </>
             )}

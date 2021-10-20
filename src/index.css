@@ -41,7 +41,7 @@ html::-webkit-scrollbar-thumb {
     max-width: 1240px;
     min-height: 100vh;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 10px;
     /* box-shadow: 0 0 8px #eee; */
     height: 100%;
     width: 100%;

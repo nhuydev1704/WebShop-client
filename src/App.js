@@ -13,21 +13,23 @@ function App() {
 
     return (
         <Router>
-            <Header />
-            {/* <div className="App"> */}
-            <Grid
-                style={{ padding: openDrawer ? '0 20px 0 40px' : '0 20px' }}
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-            >
-                <Grid item xs={12}>
-                    <Pages />
+            <div className="main_app">
+                <Header />
+                {/* <div className="App"> */}
+                <Grid
+                    style={{ padding: openDrawer ? '0 20px 0 40px' : '0 20px' }}
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Grid item xs={12}>
+                        <Pages />
+                    </Grid>
                 </Grid>
-            </Grid>
-            {/* </div> */}
-            <Footer />
+                {/* </div> */}
+                <Footer />
+            </div>
         </Router>
     );
 }

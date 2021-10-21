@@ -6,10 +6,11 @@ footer {
     width: 100%;
     text-align: center;
     padding: 16px 0;
+    margin-top: auto;
 }
 
 footer h3 {
-    opacity: .8;
+    opacity: 0.8;
     font-size: 1.05rem;
 }
 

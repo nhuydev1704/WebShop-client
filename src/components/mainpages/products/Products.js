@@ -23,8 +23,22 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Button from '@mui/material/Button';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import LaptopIcon from '@mui/icons-material/Laptop';
+import HeadphonesIcon from '@mui/icons-material/Headphones';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import SpeakerIcon from '@mui/icons-material/Speaker';
+import EventSeatIcon from '@mui/icons-material/EventSeat';
+import DesktopMacIcon from '@mui/icons-material/DesktopMac';
+import { Stack } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import AllInboxIcon from '@mui/icons-material/AllInbox';
+import FilterCategory from './FilterCategory';
+import FilterSort from './FilterSort';
 const drawerWidth = 240;
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
 function Products(props) {
     const { enqueueSnackbar } = useSnackbar();
 
@@ -39,6 +53,7 @@ function Products(props) {
     const [categories] = state.categoriesAPI.categories;
     const [loading, setLoading] = useState(false);
     const [isCheck, setIsCheck] = useState(false);
+    const [value, setValue] = React.useState(0);
 
     const handleChangeInput = async (id) => {
         products.forEach((product) => {
@@ -140,60 +155,91 @@ function Products(props) {
                 variant="persistent"
                 anchor="left"
                 open={openDrawer}
+                className="custome_drawer"
             >
                 <DrawerHeader />
-                <List>
-                    {categories &&
-                        categories.map((item, index) => (
-                            <ListItem button key={item._id}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                                <ListItemText primary={item.name} />
-                            </ListItem>
-                        ))}
-                </List>
-                <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={index}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List>
-                <Divider />
-                {isAdmin && (
-                    <List>
-                        {[
-                            <FormControlLabel
-                                style={{ paddingLeft: '10px' }}
-                                label="Chọn tất cả"
-                                control={
-                                    <Checkbox
-                                        checked={isCheck}
-                                        {...label}
-                                        style={{ display: 'none' }}
-                                        onChange={checkAll}
-                                    />
-                                }
-                            />,
-                            <span style={{ fontSize: '1.05rem', fontWeight: 400 }} onClick={deleteAll}>
-                                Xóa tất cả
-                            </span>,
-                        ].map((text, index) => (
-                            <ListItem button key={index}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
+                {categories && categories.length > 0 ? (
+                    <>
+                        <span className="category_list">Danh mục sản phẩm</span>
+                        <FilterCategory />
+                    </>
+                ) : (
+                    <>
+                        <Skeleton height={30} />
+                        <Box justifyContent="center" style={{ padding: '0 10px' }}>
+                            {Array.from(new Array(14)).map((item, index) => (
+                                <Stack direction="row" spacing={3} key={index} style={{ marginBottom: '3px' }}>
+                                    <Skeleton animation="wave" variant="circular" width={38} height={38} />{' '}
+                                    <Skeleton animation="wave" height={38} width={180} />
+                                </Stack>
+                            ))}
+                        </Box>
+                    </>
+                )}
+                {categories && categories.length > 0 && (
+                    <>
+                        {/* <Divider /> */}
+                        {/* <List>
+                            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                                <ListItem button key={index}>
+                                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItem>
+                            ))}
+                        </List> */}
+                        {isAdmin && (
+                            <>
+                                <Divider />
+                                <List>
+                                    {[
+                                        <FormControlLabel
+                                            style={{ paddingLeft: '10px' }}
+                                            label="Chọn tất cả"
+                                            control={
+                                                <Checkbox
+                                                    checked={isCheck}
+                                                    {...label}
+                                                    style={{ display: 'none' }}
+                                                    onChange={checkAll}
+                                                />
+                                            }
+                                        />,
+                                        <span style={{ fontSize: '1.05rem', fontWeight: 400 }} onClick={deleteAll}>
+                                            Xóa tất cả
+                                        </span>,
+                                    ].map((text, index) => (
+                                        <ListItem button key={index}>
+                                            <ListItemIcon>
+                                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                            </ListItemIcon>
+                                            <ListItemText primary="Inbox" primary={text} />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </>
+                        )}
+                    </>
                 )}
             </Drawer>
             <Main open={openDrawer}>
                 <DrawerHeader />
-                <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={1}>
+                <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+                    {categories && categories.length > 0 ? (
+                        <Grid item lg={12} xl={12} md={12} sm={12} xs={12}>
+                            <Item>
+                                <FilterSort />
+                            </Item>
+                        </Grid>
+                    ) : (
+                        <Grid item lg={12} xl={12} md={12} sm={12} xs={12}>
+                            <Skeleton animation="wave" height={24} width={40} />
+                            <Skeleton animation="wave" height={24} width={180} />
+                        </Grid>
+                    )}
+
                     {(loadingProduct || loading ? Array.from(new Array(8)) : products).map((product, index) => {
                         return (
-                            <Grid key={index} item md={3}>
+                            <Grid key={index} item lg={3} xl={3} md={4} sm={6} xs={12}>
                                 {product ? (
                                     <Item>
                                         <ProductItem
@@ -205,11 +251,11 @@ function Products(props) {
                                     </Item>
                                 ) : (
                                     <Box sx={{ width: 210, marginRight: 0.5, my: 5 }}>
-                                        <Skeleton variant="rectangular" width={210} height={118} />
+                                        <Skeleton animation="wave" variant="rectangular" width={210} height={118} />
 
                                         <Box sx={{ pt: 0.5 }}>
-                                            <Skeleton />
-                                            <Skeleton width="60%" />
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" width="60%" />
                                         </Box>
                                     </Box>
                                 )}
@@ -217,6 +263,7 @@ function Products(props) {
                         );
                     })}
                 </Grid>
+                {products.length === 0 && <div style={{ textAlign: 'center' }}>Chưa có sản phẩm!</div>}
             </Main>
 
             {/* {isAdmin && (

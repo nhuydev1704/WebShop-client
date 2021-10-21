@@ -5,6 +5,9 @@ import { showErrMsg, showSuccessMsg } from '../ultils/notification/Notification'
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import Card from '@mui/material/Card';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 const initialState = {
     email: '',
@@ -61,43 +64,52 @@ function Login() {
     };
     return (
         <div className="login_page">
-            <Card variant="outlined" className="card__login">
-                <h2>Đăng nhập</h2>
+            <Card variant="outlined" style={{ padding: '40px', borderRadius: '10px' }} className="card__login">
+                <Typography
+                    style={{ fontSize: '1.5rem', fontWeight: 400, textAlign: 'center' }}
+                    variant="h2"
+                    gutterBottom
+                    component="div"
+                >
+                    Đăng nhập
+                </Typography>
                 {err && showErrMsg(err)}
                 {success && showSuccessMsg(success)}
 
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <label htmlFor="email">Địa chỉ Email</label>
-                        <input
-                            type="text"
-                            placeholder="Địa chỉ Email"
-                            id="email"
+                        <TextField
+                            style={{ width: '100%' }}
+                            onChange={handleChangeInput}
                             value={email}
                             name="email"
-                            onChange={handleChangeInput}
+                            id="standard-basic"
+                            label="Địa chỉ Email"
+                            variant="standard"
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="password">Mật khẩu</label>
-                        <input
+                        <TextField
+                            style={{ width: '100%' }}
+                            id="standard-password-input"
+                            label="Mật khẩu"
                             type="password"
-                            placeholder="Mật khẩu"
-                            id="password"
+                            autoComplete="current-password"
+                            variant="standard"
                             value={password}
                             name="password"
                             onChange={handleChangeInput}
                         />
                     </div>
 
-                    <div className="row">
-                        <button type="submit">Đăng nhập</button>
+                    <div className="forgot_password">
                         <Link to="/forgot_password">Quên mật khẩu?</Link>
                     </div>
+                    <Button style={{ width: '100%', marginBottom: '10px' }} type="submit" variant="contained">
+                        Đăng nhập
+                    </Button>
                 </form>
-
-                <div className="hr">Đăng nhập bằng</div>
 
                 <div className="social">
                     <GoogleLogin
@@ -116,7 +128,10 @@ function Login() {
                 </div>
 
                 <p>
-                    Thành viên mới? <Link to="/register">Đăng ký</Link>
+                    Bạn chưa có tài khoản /{' '}
+                    <Link style={{ fontWeight: 500 }} to="/register">
+                        Đăng ký ngay
+                    </Link>
                 </p>
             </Card>
         </div>

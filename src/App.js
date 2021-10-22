@@ -4,12 +4,14 @@ import Header from './components/global/headers';
 import Footer from './components/global/footers';
 import Pages from './pages';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { ContextHook } from './ContextHook';
 
 function App() {
     const state = useContext(ContextHook);
     const [openDrawer, setOpenDrawer] = state.drawer;
+    const [loadingBackDrop, setLoadingBackDrop] = state.backdrop;
 
     return (
         <Router>
@@ -30,6 +32,9 @@ function App() {
                 {/* </div> */}
                 <Footer />
             </div>
+            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loadingBackDrop}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Router>
     );
 }

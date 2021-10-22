@@ -1,52 +1,99 @@
-import React, {useState} from 'react'
-import axios from 'axios'
-import {isEmail} from '../ultils/validation/Validation'
-import {showErrMsg, showSuccessMsg} from '../ultils/notification/Notification'
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import { useSnackbar } from 'notistack';
+import React, { useContext, useState } from 'react';
+import { ContextHook } from '../../../ContextHook';
+import { isEmail } from '../ultils/validation/Validation';
 
 const initialState = {
     email: '',
-    err: '',
-    success: ''
-}
+};
 
 function ForgotPassword() {
-    const [data, setData] = useState(initialState)
+    const { enqueueSnackbar } = useSnackbar();
 
-    const {email, err, success} = data
+    const state = useContext(ContextHook);
+    const [loadingBackDrop, setLoadingBackDrop] = state.backdrop;
 
-    const handleChangeInput = e => {
-        const {name, value} = e.target
-        setData({...data, [name]:value, err: '', success: ''})
-    }
+    const [data, setData] = useState(initialState);
+
+    const { email } = data;
+
+    const handleChangeInput = (e) => {
+        const { name, value } = e.target;
+        setData({ ...data, [name]: value });
+    };
 
     const forgotPassword = async () => {
-        if(!isEmail(email))
-            return setData({...data, err: 'Email không được để trống.', success: ''})
-            
-        try {
-            const res = await axios.post('/user/forgot', {email})
+        setLoadingBackDrop(true);
 
-            return setData({...data, err: '', success: res.data.msg})
-        } catch (err) {
-            err.response.data.msg && setData({...data, err:  err.response.data.msg, success: ''})
+        if (!isEmail(email)) {
+            setLoadingBackDrop(false);
+            return enqueueSnackbar('Email không được để trống', {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
         }
-    }
-    
+
+        try {
+            const res = await axios.post('/user/forgot', { email });
+            enqueueSnackbar(res.data.msg, {
+                variant: 'success',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
+            setLoadingBackDrop(false);
+            return setData({ ...data });
+        } catch (err) {
+            err.response.data.msg &&
+                enqueueSnackbar(err.response.data.msg, {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            setLoadingBackDrop(false);
+        }
+    };
+
     return (
-        <div className="fg_pass">
-            <h2>Quên mật khẩu?</h2>
+        <div className="login_page">
+            <Card variant="outlined" style={{ padding: '40px', borderRadius: '10px' }} className="card__login">
+                <Typography
+                    style={{ fontSize: '1.5rem', fontWeight: 400, textAlign: 'center' }}
+                    variant="h2"
+                    gutterBottom
+                    component="div"
+                >
+                    Quên mật khẩu
+                </Typography>
 
-            <div className="row">
-                {err && showErrMsg(err)}
-                {success && showSuccessMsg(success)}
-
-                <label htmlFor="email">Nhập địa chỉ email của bạn</label>
-                <input type="email" name="email" id="email" value={email}
-                onChange={handleChangeInput} />
-                <button onClick={forgotPassword}>Xác nhận</button>
-            </div>
+                <div className="row">
+                    <TextField
+                        style={{ width: '100%' }}
+                        onChange={handleChangeInput}
+                        value={email}
+                        name="email"
+                        id="standard-basic"
+                        label="Địa chỉ email"
+                        variant="standard"
+                    />
+                    <Button onClick={forgotPassword} style={{ width: '100%', margin: '10px 0' }} variant="contained">
+                        Xác nhận
+                    </Button>
+                </div>
+            </Card>
         </div>
-    )
+    );
 }
 
-export default ForgotPassword
+export default ForgotPassword;

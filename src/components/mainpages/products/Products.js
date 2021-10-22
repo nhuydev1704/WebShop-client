@@ -1,9 +1,12 @@
 import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -13,33 +16,16 @@ import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import React, { useContext, useState } from 'react';
 import { ContextHook } from '../../../ContextHook';
-import Loading from '../ultils/loading/Loading';
 import ProductItem from '../ultils/ProductItem/ProductItem';
-import { useSnackbar } from 'notistack';
-import Favorite from '@mui/icons-material/Favorite';
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Button from '@mui/material/Button';
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
-import LaptopIcon from '@mui/icons-material/Laptop';
-import HeadphonesIcon from '@mui/icons-material/Headphones';
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import SpeakerIcon from '@mui/icons-material/Speaker';
-import EventSeatIcon from '@mui/icons-material/EventSeat';
-import DesktopMacIcon from '@mui/icons-material/DesktopMac';
-import { Stack } from '@mui/material';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import AllInboxIcon from '@mui/icons-material/AllInbox';
 import FilterCategory from './FilterCategory';
 import FilterSort from './FilterSort';
 const drawerWidth = 240;
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-function Products(props) {
+function Products() {
     const { enqueueSnackbar } = useSnackbar();
 
     const state = useContext(ContextHook);
@@ -48,12 +34,10 @@ function Products(props) {
     const [isAdmin] = state.userAPI.isAdmin;
     const [token] = state.token;
     const [callback, setCallback] = state.productsAPI.callback;
-    const [category, setCategory] = state.productsAPI.category;
     const [loadingProduct, setLoadingProduct] = state.productsAPI.loading;
     const [categories] = state.categoriesAPI.categories;
     const [loading, setLoading] = useState(false);
     const [isCheck, setIsCheck] = useState(false);
-    const [value, setValue] = React.useState(0);
 
     const handleChangeInput = async (id) => {
         products.forEach((product) => {
@@ -90,7 +74,13 @@ function Products(props) {
                 },
             });
         } catch (err) {
-            alert(err?.response?.data?.msg);
+            enqueueSnackbar(err?.response?.data?.msg, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
         }
     };
 

@@ -1,9 +1,8 @@
-import React, { useContext, useState } from 'react';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import React, { useContext } from 'react';
 import { ContextHook } from '../../../ContextHook';
 
 const FilterSort = () => {

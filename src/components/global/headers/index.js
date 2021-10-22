@@ -1,5 +1,7 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { CssBaseline } from '@mui/material';
+import MuiAppBar from '@mui/material/AppBar';
 // import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
@@ -8,17 +10,14 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import MuiAppBar from '@mui/material/AppBar';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ContextHook } from '../../../ContextHook';
-import DrawerNavbar from '../../commonComponents/DrawerNavbar';
-import { CssBaseline } from '@mui/material';
 const drawerWidth = 240;
 function Header() {
     const state = useContext(ContextHook);

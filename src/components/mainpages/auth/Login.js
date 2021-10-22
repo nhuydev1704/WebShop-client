@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { showErrMsg, showSuccessMsg } from '../ultils/notification/Notification';
-import { GoogleLogin } from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import axios from 'axios';
+import { useSnackbar } from 'notistack';
+import React, { useContext, useState } from 'react';
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
+import { Link } from 'react-router-dom';
+import { ContextHook } from '../../../ContextHook';
 
 const initialState = {
     email: '',
     password: '',
-    err: '',
-    success: '',
 };
-
 function Login() {
+    const { enqueueSnackbar } = useSnackbar();
+
     const [user, setUser] = useState(initialState);
-    const { email, password, err, success } = user;
+    const { email, password } = user;
+
+    const state = useContext(ContextHook);
+    const [loadingBackDrop, setLoadingBackDrop] = state.backdrop;
 
     const handleChangeInput = (e) => {
         const { name, value } = e.target;
@@ -26,40 +29,91 @@ function Login() {
     };
 
     const handleSubmit = async (e) => {
+        setLoadingBackDrop(true);
         e.preventDefault();
         try {
-            await axios.post('/user/login', { ...user });
+            const res = await axios.post('/user/login', { ...user });
+            enqueueSnackbar(res.data.msg, {
+                variant: 'success',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
+            setLoadingBackDrop(false);
             localStorage.setItem('firstLogin', true);
             window.location.href = '/';
         } catch (err) {
-            alert(err.response.data.msg);
+            enqueueSnackbar(err.response.data.msg, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
+            setLoadingBackDrop(false);
         }
     };
 
     const responseGoogle = async (response) => {
+        setLoadingBackDrop(true);
+
         try {
             const res = await axios.post('/user/google_login', { tokenId: response.tokenId });
-            setUser({ ...user, error: '', success: res.data.msg });
+            enqueueSnackbar(res.data.msg, {
+                variant: 'success',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
+            setUser({ ...user });
+            setLoadingBackDrop(false);
             localStorage.setItem('firstLogin', true);
-
-            // dispatch(dispatchLogin())
             window.location.href = '/';
         } catch (err) {
-            err.response.data.msg && setUser({ ...user, err: err.response.data.msg, success: '' });
+            err.response.data.msg &&
+                enqueueSnackbar(err.response.data.msg, {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            setLoadingBackDrop(false);
         }
     };
 
     const responseFacebook = async (response) => {
+        setLoadingBackDrop(true);
+
         try {
             const { accessToken, userID } = response;
             const res = await axios.post('/user/facebook_login', { accessToken, userID });
+            enqueueSnackbar(res.data.msg, {
+                variant: 'success',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
 
-            setUser({ ...user, error: '', success: res.data.msg });
+            setUser({ ...user });
+            setLoadingBackDrop(false);
+
             localStorage.setItem('firstLogin', true);
 
             window.location.href = '/';
         } catch (err) {
-            err.response.data.msg && setUser({ ...user, err: err.response.data.msg, success: '' });
+            err.response.data.msg &&
+                enqueueSnackbar(err.response.data.msg, {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            setLoadingBackDrop(false);
         }
     };
     return (
@@ -73,8 +127,6 @@ function Login() {
                 >
                     Đăng nhập
                 </Typography>
-                {err && showErrMsg(err)}
-                {success && showSuccessMsg(success)}
 
                 <form onSubmit={handleSubmit}>
                     <div>
@@ -116,6 +168,7 @@ function Login() {
                         clientId="394874475785-vpnumlouj30mbicdtvoi6g0d6si6nmac.apps.googleusercontent.com"
                         buttonText="Đăng nhập với google"
                         onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
                         cookiePolicy={'single_host_origin'}
                     />
 

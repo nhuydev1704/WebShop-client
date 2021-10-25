@@ -39,12 +39,12 @@ header a {
 
 .cart-icon {
     position: fixed;
-    bottom: 60px;
-    right: 20px;
-    z-index: 9999;
+    bottom: 110px;
+    right: 31px;
+    z-index: -1;
     border-radius: 50%;
     background-color: rgba(94, 171, 59, 0.516);
-    padding: 20px;
+    padding: 16px;
 }
 
 .cart-icon:hover {

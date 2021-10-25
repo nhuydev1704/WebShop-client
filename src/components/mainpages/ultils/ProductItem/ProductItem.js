@@ -6,9 +6,9 @@ import Rating from '../../detailProduct/rating/Rating';
 import BtnRender from './BtnRender';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-function ProductItem({ product, isAdmin, deleteProduct, handleChangeInput }) {
+function ProductItem({ product, isAdmin, deleteProduct, handleChangeInput, isDetail }) {
     return (
-        <>
+        <div className={isDetail ? 'product_isdetail' : ''}>
             {/* <input
                     className="checkbox_product"
                     type="checkbox"
@@ -36,7 +36,7 @@ function ProductItem({ product, isAdmin, deleteProduct, handleChangeInput }) {
                 </span>
             </div>
             {isAdmin && <BtnRender product={product} deleteProduct={deleteProduct} />}
-        </>
+        </div>
     );
 }
 

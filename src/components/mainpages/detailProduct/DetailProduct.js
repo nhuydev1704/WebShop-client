@@ -8,6 +8,10 @@ import ProductItem from '../ultils/ProductItem/ProductItem';
 import CommentItem from './commentItem/CommentItem';
 import FormInput from './formInput/FormInput';
 import Rating from './rating/Rating';
+import { Col, Row } from 'antd';
+import Card from '@mui/material/Card';
+import Button from '@mui/material/Button';
+import Slider from 'react-slick';
 
 function DetailProduct() {
     const { id } = useParams();
@@ -42,7 +46,6 @@ function DetailProduct() {
     }, [id, page]);
 
     //realtime
-    //join room
 
     useEffect(() => {
         if (socket) {
@@ -60,21 +63,6 @@ function DetailProduct() {
         }
     }, [socket, comments]);
 
-    //scroll
-    // var pageEnd1 = useRef()
-    // useEffect(() => {
-    //     const observer = new IntersectionObserver(entries => {
-    //         if(entries[0].isIntersecting){
-    //             setPage(prev => prev + 1)
-    //         }
-    //     },{
-    //         threshold: 0.1
-    //     })
-
-    //     observer.observe(pageEnd1.current)
-    // },[])
-
-    //reply comment
     // Reply Comments
     useEffect(() => {
         if (socket) {
@@ -94,46 +82,101 @@ function DetailProduct() {
         }
     }, [socket, comments]);
 
-    console.log(detailProduct);
+    const prodcutDt = products.filter((item) => item.category === detailProduct.category);
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        slidesToShow: prodcutDt.length >= 4 ? 4 : prodcutDt.length,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 2000,
+        pauseOnHover: true,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    initialSlide: 2,
+                },
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                },
+            },
+        ],
+    };
+
     if (detailProduct.length === 0) return null;
     return (
         <div>
-            <div className="detail">
-                <img src={detailProduct.images.url} alt="anhdep" />
-                <div className="box-detail">
-                    <div className="row">
-                        <h2>{detailProduct.title}</h2>
-                        {/* <h6>
-                            #id: {detailProduct.product_id}
-                        </h6> */}
-                        <span>
+            <Card className="detail">
+                <Row justify="space-between" align="center">
+                    <Col span={9}>
+                        <img className="img_product-detail" src={detailProduct.images.url} alt="anhdep" />
+                    </Col>
+                    <Col span={15} className="box-detail">
+                        <h2 style={{ textTransform: 'capitalize' }}>{detailProduct.title}</h2>
+
+                        <div className="rating_review-sold">
+                            <Rating props={detailProduct} />
+                            <span className="review_sold review_sold-sold">
+                                <span style={{ marginRight: '6px', color: '#222', borderBottom: '1px solid' }}>
+                                    {detailProduct.numReviews}
+                                </span>{' '}
+                                <span style={{ textTransform: 'capitalize' }}>đánh giá</span>
+                            </span>
+                            <span className="review_sold">
+                                <span style={{ marginRight: '6px', color: '#222' }}>{detailProduct.sold}</span> Đã bán
+                            </span>
+                        </div>
+                        <span className="product_price-detail">
                             Giá: {detailProduct.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                         </span>
-                        <p>{detailProduct.description}</p>
-                        {/* <p>{detailProduct.content}</p> */}
-                        <p>Đã bán: {detailProduct.sold}</p>
-                        <Link to="/cart" className="cart" onClick={() => addCart(detailProduct)}>
-                            Mua Ngay
+                        <p style={{ marginTop: '10px' }}>{detailProduct.description}</p>
+
+                        <Link to="/cart" onClick={() => addCart(detailProduct)}>
+                            <Button variant="contained">Mua ngay</Button>
                         </Link>
-                        <div>
-                            <h3 style={{ margin: '10px 0', fontSize: '1.2rem' }}>
-                                Xếp hạng: {detailProduct.numReviews} đánh giá
-                            </h3>
-                            <Rating props={detailProduct} />
-                        </div>
+                    </Col>
+                </Row>
+            </Card>
+            {prodcutDt.length > 1 && (
+                <Card style={{ padding: '10px 0' }}>
+                    <h2 className="repleated-product">Sản phẩm tương tự</h2>
+                    <div className="products" style={{ width: '100%' }}>
+                        <Slider {...settings} style={{ width: '100%' }}>
+                            {prodcutDt.map((product) => {
+                                {
+                                    /* return product.category === detailProduct.category ? ( */
+                                }
+                                return (
+                                    <div key={product._id} className="item_product item_product-detail">
+                                        <Link to={`/detail/${product._id}`}>
+                                            <ProductItem isDetail product={product} />
+                                        </Link>
+                                    </div>
+                                );
+                                {
+                                    /* ) : null; */
+                                }
+                            })}
+                        </Slider>
                     </div>
-                </div>
-            </div>
-            <div>
-                <h2 className="repleated-product">Sản phẩm tương tự</h2>
-                <div className="products">
-                    {products.map((product) => {
-                        return product.category === detailProduct.category ? (
-                            <ProductItem key={product._id} product={product} />
-                        ) : null;
-                    })}
-                </div>
-            </div>
+                </Card>
+            )}
             <div className="comments">
                 <h2>Bình luận và đánh giá</h2>
 

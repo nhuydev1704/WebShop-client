@@ -3,22 +3,42 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ContextHook } from '../../../ContextHook';
 import Loading from '../ultils/loading/Loading';
 import { useHistory, useParams } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { Slider, InputNumber, Row, Col, Button, Upload } from 'antd';
+import { Input } from 'antd';
+import Card from '@mui/material/Card';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { UploadOutlined } from '@ant-design/icons';
+import { Button as ButtonMUI } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
+const { TextArea } = Input;
 const initialState = {
     product_id: '',
     title: '',
-    price: 0,
+    price: 100000,
     description: '',
-    content: '',
     category: '',
     _id: '',
 };
+
 function CreateProduct() {
+    const { enqueueSnackbar } = useSnackbar();
+
     const state = useContext(ContextHook);
     const [product, setProduct] = useState(initialState);
     const [categories] = state.categoriesAPI.categories;
+    const [loadingBackDrop, setLoadingBackDrop] = state.backdrop;
+
     const [images, setImages] = useState(false);
-    const [loading, setLoading] = useState(false);
+
+    const handleChange = (newValue) => {
+        setProduct({ ...product, price: newValue });
+    };
 
     const history = useHistory();
     const param = useParams();
@@ -45,33 +65,72 @@ function CreateProduct() {
 
     const [isAdmin] = state.userAPI.isAdmin;
     const [token] = state.token;
-    const handleUpfile = async (e) => {
-        e.preventDefault();
+
+    const handleUpfile = async (file) => {
+        setLoadingBackDrop(true);
         try {
-            if (!isAdmin) return alert('Bạn không phải admin');
-            const file = e.target.files[0];
+            if (!isAdmin) {
+                setLoadingBackDrop(false);
+                return enqueueSnackbar('Bạn không phải Admin', {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            }
 
-            if (!file) return alert('File not exists.');
+            if (!file) {
+                setLoadingBackDrop(false);
+                return enqueueSnackbar('Tập tin không tồn tại', {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            }
 
-            if (file.size > 1024 * 1024)
-                //1mb
-                return alert('Size to large!');
+            if (file.size > 1024 * 1024) {
+                setLoadingBackDrop(false);
+                return enqueueSnackbar('Kích cỡ quá lớn', {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            }
 
-            if (file.type !== 'image/jpeg' && file.type !== 'image/png')
-                //1mb
-                return alert('File format is incorrect.');
+            if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+                setLoadingBackDrop(false);
+                return enqueueSnackbar('Tập tin không đúng định dạng', {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            }
 
             let formData = new FormData();
             formData.append('file', file);
 
-            setLoading(true);
             const res = await axios.post('/api/upload', formData, {
                 headers: { 'context-type': 'multipart/form-data', Authorization: token },
             });
-            setLoading(false);
+
+            setLoadingBackDrop(false);
             setImages(res.data);
         } catch (err) {
-            alert(err.response.data.msg);
+            enqueueSnackbar(err.response.data.msg, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
+            setLoadingBackDrop(false);
         }
     };
 
@@ -81,9 +140,19 @@ function CreateProduct() {
     };
 
     const handleDestroy = async () => {
+        setLoadingBackDrop(true);
+
         try {
-            if (!isAdmin) return alert('Bạn không phải admin');
-            setLoading(true);
+            if (!isAdmin) {
+                setLoadingBackDrop(false);
+                return enqueueSnackbar('Bạn không phải Admin', {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            }
 
             await axios.post(
                 '/api/destroy',
@@ -92,42 +161,95 @@ function CreateProduct() {
                     headers: { Authorization: token },
                 }
             );
-            setLoading(false);
+            setLoadingBackDrop(false);
+
             setImages(false);
         } catch (err) {
-            alert(err.response.data.msg);
+            enqueueSnackbar(err.response.data.msg, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
+            setLoadingBackDrop(false);
         }
     };
 
     const onSubmit = async (e) => {
+        setLoadingBackDrop(true);
+
         e.preventDefault();
         try {
-            if (!isAdmin) return alert('Bạn không phải admin');
-            if (!images) return alert('Chưa chọn ảnh!');
+            if (!isAdmin) {
+                setLoadingBackDrop(false);
+
+                return enqueueSnackbar('Bạn không phải Admin', {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            }
+            if (!images) {
+                setLoadingBackDrop(false);
+
+                return enqueueSnackbar('Chưa chọn ảnh', {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+            }
 
             if (onEdit) {
-                await axios.put(
+                const res = await axios.put(
                     `/api/products/${product._id}`,
                     { ...product, images },
                     {
                         headers: { Authorization: token },
                     }
                 );
+                enqueueSnackbar(res.data.msg, {
+                    variant: 'success',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+                setLoadingBackDrop(false);
             } else {
-                await axios.post(
+                const res = await axios.post(
                     '/api/products',
                     { ...product, images },
                     {
                         headers: { Authorization: token },
                     }
                 );
+                enqueueSnackbar(res.data.msg, {
+                    variant: 'success',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right',
+                    },
+                });
+                setLoadingBackDrop(false);
             }
 
             setCallback(!callback);
 
             history.push('/');
         } catch (err) {
-            alert(err.response.data.msg);
+            enqueueSnackbar(err.response.data.msg, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
+            setLoadingBackDrop(false);
         }
     };
 
@@ -135,106 +257,160 @@ function CreateProduct() {
         display: images ? 'block' : 'none',
     };
 
+    const propsUpload = {
+        name: 'file',
+        action: '',
+        maxCount: 1,
+        multiple: false,
+        onChange(info) {
+            if (info.file.status !== 'uploading') {
+                const fileList = [...info.fileList].slice(-1);
+
+                if (fileList[0]) {
+                    handleUpfile(fileList[0]?.originFileObj);
+                } else {
+                    handleDestroy();
+                }
+            }
+        },
+    };
+
     return (
-        <div className="create_product">
-            <div className="upload">
-                <input type="file" name="file" id="file_up" onChange={handleUpfile} />
-                {loading ? (
-                    <div id="file_img">
-                        <Loading></Loading>
-                    </div>
-                ) : (
-                    <div id="file_img" style={styleUpload}>
-                        <img src={images ? images.url : ''} alt="" />
-                        <span onClick={handleDestroy}>X</span>
-                    </div>
-                )}
-            </div>
+        <Card className="create_product">
+            <Row gutter={[36, 12]} style={{ flexDirection: 'row-reverse' }}>
+                <Col xs={24} sm={24} md={12}>
+                    <Row justify="center" align="middle">
+                        <Col
+                            span={20}
+                            style={{
+                                border: '1px solid #ccc',
+                                height: '250px',
+                                borderRadius: '10px',
+                                padding: '20px',
+                                display: 'flex',
+                            }}
+                        >
+                            {product.title && (
+                                <>
+                                    <div id="file_img" style={styleUpload}>
+                                        <img src={images ? images.url : ''} alt="" />
+                                        {onEdit && <span onClick={handleDestroy}>X</span>}
+                                    </div>
+                                    <div className="product_box">
+                                        <h2 title={product.title}>{product.title}</h2>
+                                        <span className="price_product">
+                                            {product.price.toLocaleString('it-IT', {
+                                                style: 'currency',
+                                                currency: 'VND',
+                                            })}
+                                        </span>
+                                    </div>
+                                </>
+                            )}
+                        </Col>
+                    </Row>
+                </Col>
+                <Col xs={24} sm={24} md={12}>
+                    <form onSubmit={onSubmit}>
+                        <Row gutter={[24, 24]} align="middle" justify="center">
+                            <Col xs={24} sm={24} md={24} xl={12} lg={12}>
+                                <TextField
+                                    style={{ width: '100%' }}
+                                    onChange={handleChangeInput}
+                                    value={product.product_id}
+                                    name="product_id"
+                                    id="standard-basic"
+                                    label="Mã sản phẩm"
+                                    variant="standard"
+                                    disabled={onEdit}
+                                    required
+                                />
+                            </Col>
 
-            <form onSubmit={onSubmit}>
-                <div className="row">
-                    <label htmlFor="product_id">ID Sản Phẩm</label>
-                    <input
-                        type="text"
-                        name="product_id"
-                        id="product_id"
-                        disabled={onEdit}
-                        required
-                        value={product.product_id}
-                        onChange={handleChangeInput}
-                    />
-                </div>
+                            <Col xs={24} sm={24} md={24} xl={12} lg={12}>
+                                <TextField
+                                    style={{ width: '100%' }}
+                                    onChange={handleChangeInput}
+                                    value={product.title}
+                                    name="title"
+                                    id="standard-basic"
+                                    label="Tiêu đề"
+                                    variant="standard"
+                                    required
+                                />
+                            </Col>
 
-                <div className="row">
-                    <label htmlFor="title">Tiêu Đề</label>
-                    <input
-                        type="text"
-                        name="title"
-                        id="title"
-                        required
-                        value={product.title}
-                        onChange={handleChangeInput}
-                    />
-                </div>
+                            <Col xs={24} sm={24} md={24} xl={12} lg={12}>
+                                <Row align="middle" style={{ marginTop: '16px' }}>
+                                    {/* <Col span={2}> Giá</Col> */}
+                                    <Col span={18}>
+                                        <Slider
+                                            min={10000}
+                                            max={50000000}
+                                            onChange={handleChange}
+                                            value={typeof product.price === 'number' ? product.price : 0}
+                                        />
+                                    </Col>
+                                    <Col span={4}>
+                                        <InputNumber
+                                            min={10000}
+                                            max={50000000}
+                                            value={product.price}
+                                            onChange={handleChange}
+                                        />
+                                    </Col>
+                                </Row>
+                            </Col>
 
-                <div className="row">
-                    <label htmlFor="price">Giá</label>
-                    <input
-                        type="number"
-                        name="price"
-                        id="price"
-                        required
-                        value={product.price}
-                        onChange={handleChangeInput}
-                    />
-                </div>
-
-                <div className="row">
-                    <label htmlFor="description">Mô Tả</label>
-                    <textarea
-                        type="text"
-                        name="description"
-                        id="description"
-                        required
-                        value={product.description}
-                        rows="5"
-                        onChange={handleChangeInput}
-                    />
-                </div>
-
-                <div className="row">
-                    <label htmlFor="content">Nội Dung</label>
-                    <textarea
-                        type="text"
-                        name="content"
-                        id="content"
-                        required
-                        value={product.content}
-                        rows="7"
-                        onChange={handleChangeInput}
-                    />
-                </div>
-
-                <div className="row">
-                    <label htmlFor="categories">Thể loại: </label>
-                    <select
-                        className="select-category"
-                        name="category"
-                        value={product.category}
-                        onChange={handleChangeInput}
-                    >
-                        <option value="">Chọn thể loại</option>
-                        {categories.map((category) => (
-                            <option key={category._id} value={category.name}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <button type="submit">{onEdit ? 'Cập Nhật' : 'Thêm'}</button>
-            </form>
-        </div>
+                            <Col span={12}>
+                                <FormControl variant="standard" sx={{ m: 1, minWidth: '96.5%' }}>
+                                    <InputLabel id="demo-simple-select-filled-label">Danh mục</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-autowidth-label"
+                                        id="demo-simple-select-autowidth"
+                                        autoWidth
+                                        value={product.category}
+                                        onChange={handleChangeInput}
+                                        name="category"
+                                    >
+                                        {categories.map((category) => (
+                                            <MenuItem key={category._id} value={category.name}>
+                                                {category.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Col>
+                            <Col span={24}>
+                                <TextArea
+                                    name="description"
+                                    required
+                                    placeholder="Nhập mô tả"
+                                    value={product.description}
+                                    onChange={handleChangeInput}
+                                    rows={4}
+                                />
+                            </Col>
+                            <Col span={24} style={{ display: 'flex', justifyContent: 'center' }}>
+                                <Upload
+                                    style={{ width: '100%' }}
+                                    {...propsUpload}
+                                    accept="image/*"
+                                    beforeUpload={() => false}
+                                >
+                                    <Button style={{ width: '100%' }} icon={<UploadOutlined />}>
+                                        Chọn ảnh bìa
+                                    </Button>
+                                </Upload>
+                            </Col>
+                            <ButtonMUI type="submit" variant="contained">
+                                {onEdit ? 'Cập Nhật' : 'Thêm'}
+                            </ButtonMUI>
+                        </Row>
+                    </form>
+                </Col>
+            </Row>
+        </Card>
     );
 }
 

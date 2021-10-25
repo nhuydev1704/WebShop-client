@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 let rate = 0;
 function Rating({ props }) {
+    const { pathname } = useLocation();
+
     if (props.numReviews) {
         rate = 100 - (props.rating / props.numReviews) * 18;
     } else {
@@ -14,6 +17,9 @@ function Rating({ props }) {
 
     return (
         <div className="rating">
+            {pathname !== '/' && !isNaN(props.rating / props.numReviews) && (
+                <span>{props.rating / props.numReviews}</span>
+            )}
             <div className="star">
                 <i className="far fa-star"></i>
                 <i className="far fa-star"></i>

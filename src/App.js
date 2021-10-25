@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Header from './components/global/headers';
 import Footer from './components/global/footers';
 import Pages from './pages';
@@ -9,17 +9,22 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { ContextHook } from './ContextHook';
 
 function App() {
+    const { pathname } = useLocation();
+
     const state = useContext(ContextHook);
     const [openDrawer, setOpenDrawer] = state.drawer;
     const [loadingBackDrop, setLoadingBackDrop] = state.backdrop;
 
     return (
-        <Router>
+        <>
             <div className="main_app">
                 <Header />
                 {/* <div className="App"> */}
                 <Grid
-                    style={{ padding: openDrawer ? '0 20px 0 40px' : '0 20px' }}
+                    style={{
+                        padding: openDrawer && pathname === '/' ? '0 20px 0 40px' : '0 20px',
+                        marginBottom: '40px',
+                    }}
                     container
                     direction="row"
                     justifyContent="center"
@@ -35,7 +40,7 @@ function App() {
             <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loadingBackDrop}>
                 <CircularProgress color="inherit" />
             </Backdrop>
-        </Router>
+        </>
     );
 }
 

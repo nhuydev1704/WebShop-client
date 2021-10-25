@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ContextHook } from '../../../ContextHook';
 import ProductItem from '../ultils/ProductItem/ProductItem';
 import FilterCategory from './FilterCategory';
@@ -231,13 +232,15 @@ function Products() {
                         return (
                             <Grid key={index} item lg={3} xl={3} md={4} sm={6} xs={12}>
                                 {product ? (
-                                    <Item>
-                                        <ProductItem
-                                            product={product}
-                                            isAdmin={isAdmin}
-                                            deleteProduct={deleteProduct}
-                                            handleChangeInput={handleChangeInput}
-                                        />
+                                    <Item className="item_product">
+                                        <Link to={`/detail/${product._id}`}>
+                                            <ProductItem
+                                                product={product}
+                                                isAdmin={isAdmin}
+                                                deleteProduct={deleteProduct}
+                                                handleChangeInput={handleChangeInput}
+                                            />
+                                        </Link>
                                     </Item>
                                 ) : (
                                     <Box sx={{ width: 210, marginRight: 0.5, my: 5 }}>

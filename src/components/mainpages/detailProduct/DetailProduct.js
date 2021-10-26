@@ -21,11 +21,12 @@ function DetailProduct() {
     const [detailProduct, setDetailProduct] = useState([]);
     const addCart = state.userAPI.addCart;
     const socket = state.socket;
+    const [page, setPage] = state.productsAPI.page;
 
     const [loading, setLoading] = useState(false);
     const [rating, setRating] = useState(0);
     const [comments, setComments] = useState([]);
-    const [page] = useState(1);
+    const [pageComment] = useState(1);
 
     useEffect(() => {
         if (params.id) {
@@ -37,15 +38,19 @@ function DetailProduct() {
 
     useEffect(() => {
         setLoading(true);
-        getData(`/api/comments/${id}?limit=${page * 6}`)
+        getData(`/api/comments/${id}?limit=${pageComment * 6}`)
             .then((res) => {
                 setComments((r) => (r = res.data.comments));
                 setLoading(false);
             })
             .catch((err) => console.log(err.response.data.msg));
-    }, [id, page]);
+    }, [id, pageComment]);
 
     //realtime
+
+    useEffect(() => {
+        setPage(10);
+    }, []);
 
     useEffect(() => {
         if (socket) {
@@ -154,7 +159,7 @@ function DetailProduct() {
                 </Row>
             </Card>
             {prodcutDt.length > 1 && (
-                <Card style={{ padding: '10px 0' }}>
+                <Card style={{ padding: '10px 0', marginBottom: '40px' }}>
                     <h2 className="repleated-product">Sản phẩm tương tự</h2>
                     <div className="products" style={{ width: '100%' }}>
                         <Slider {...settings} style={{ width: '100%' }}>
@@ -177,7 +182,7 @@ function DetailProduct() {
                     </div>
                 </Card>
             )}
-            <div className="comments">
+            <Card className="comments">
                 <h2>Bình luận và đánh giá</h2>
 
                 <div className="reviews">
@@ -204,13 +209,13 @@ function DetailProduct() {
                         <CommentItem key={comment._id} comment={comment} socket={socket} />
                     ))}
                 </div>
-            </div>
-            {loading && (
+            </Card>
+            {/* {loading && (
                 <div className="loading">
                     <img src={Load} alt="" />
                 </div>
-            )}
-            {/* <button ref={pageEnd1} style={{opacity: 0}}>Load more</button> */}
+            )} */}
+            {/* <button ref={pageComment} style={{opacity: 0}}>Load more</button> */}
         </div>
     );
 }

@@ -284,6 +284,5 @@
 }
 
 .slick-slider.slick-initialized {
-    max-width: 100vw;
-    width: 100vw !important;
+    width: 94vw !important;
 }

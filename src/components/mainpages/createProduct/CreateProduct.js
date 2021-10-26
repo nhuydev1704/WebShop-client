@@ -374,7 +374,7 @@ function CreateProduct() {
                                         name="category"
                                     >
                                         {categories.map((category) => (
-                                            <MenuItem key={category._id} value={category.name}>
+                                            <MenuItem key={category._id} value={category._id}>
                                                 {category.name}
                                             </MenuItem>
                                         ))}

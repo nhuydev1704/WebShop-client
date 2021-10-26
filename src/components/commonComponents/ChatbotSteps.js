@@ -7,6 +7,7 @@ const initialState = {
 };
 const ChatbotSteps = (props) => {
     const { steps } = props;
+    console.log('🚀 ~ file: ChatbotSteps.js ~ line 10 ~ ChatbotSteps ~ props', props);
     const [info, setInfo] = useState(initialState);
 
     useEffect(() => {
@@ -17,19 +18,19 @@ const ChatbotSteps = (props) => {
 
     return (
         <div style={{ width: '100%' }}>
-            <h3>Summary</h3>
+            <h3>Thông tin</h3>
             <table>
                 <tbody>
                     <tr>
-                        <td>Name</td>
+                        <td>Tên</td>
                         <td>{info.name.value}</td>
                     </tr>
                     <tr>
-                        <td>Gender</td>
+                        <td>Giới tính</td>
                         <td>{info.gender.value}</td>
                     </tr>
                     <tr>
-                        <td>Age</td>
+                        <td>Tuổi</td>
                         <td>{info.age.value}</td>
                     </tr>
                 </tbody>

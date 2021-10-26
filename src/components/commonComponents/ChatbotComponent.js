@@ -1,17 +1,22 @@
 import ChatBot from 'react-simple-chatbot';
-
+import SmsIcon from '@mui/icons-material/Sms';
 import React, { useState } from 'react';
 import ChatbotSteps from './ChatbotSteps';
 
 const ChatbotComponet = () => {
     return (
         <ChatBot
+            floatingIcon={<SmsIcon style={{ color: 'white' }} />}
+            handleEnd={(renderedSteps, steps, values) => {
+                console.log({ renderedSteps, steps, values });
+            }}
+            placeholder="Trợ lý thương mại..."
             floating={true}
             headerTitle="Trợ lý thương mại"
             steps={[
                 {
                     id: '1',
-                    message: 'What is your name?',
+                    message: 'Tên mày là gì?',
                     trigger: 'name',
                 },
                 {
@@ -21,19 +26,19 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: '3',
-                    message: 'Hi {previousValue}! What is your gender?',
+                    message: 'Thằng {previousValue}! Mày giới tính gì?',
                     trigger: 'gender',
                 },
                 {
                     id: 'gender',
                     options: [
-                        { value: 'male', label: 'Male', trigger: '5' },
-                        { value: 'female', label: 'Female', trigger: '5' },
+                        { value: 'male', label: 'Nam', trigger: '5' },
+                        { value: 'female', label: 'Nữ', trigger: '5' },
                     ],
                 },
                 {
                     id: '5',
-                    message: 'How old are you?',
+                    message: 'Mày bao tuổi?',
                     trigger: 'age',
                 },
                 {
@@ -54,7 +59,7 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: '7',
-                    message: 'Great! Check out your summary',
+                    message: 'Ok thông tin của mày là!',
                     trigger: 'review',
                 },
                 {
@@ -65,27 +70,27 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: 'update',
-                    message: 'Would you like to update some field?',
+                    message: 'Mày có muốn cập nhật lại thông tin?',
                     trigger: 'update-question',
                 },
                 {
                     id: 'update-question',
                     options: [
-                        { value: 'yes', label: 'Yes', trigger: 'update-yes' },
-                        { value: 'no', label: 'No', trigger: 'end-message' },
+                        { value: 'yes', label: 'Có', trigger: 'update-yes' },
+                        { value: 'no', label: 'Không', trigger: 'end-message' },
                     ],
                 },
                 {
                     id: 'update-yes',
-                    message: 'What field would you like to update?',
+                    message: 'Mày muốn cập nhật cái gì?',
                     trigger: 'update-fields',
                 },
                 {
                     id: 'update-fields',
                     options: [
-                        { value: 'name', label: 'Name', trigger: 'update-name' },
-                        { value: 'gender', label: 'Gender', trigger: 'update-gender' },
-                        { value: 'age', label: 'Age', trigger: 'update-age' },
+                        { value: 'name', label: 'Tên?', trigger: 'update-name' },
+                        { value: 'gender', label: 'Giới tính?', trigger: 'update-gender' },
+                        { value: 'age', label: 'Tuổi', trigger: 'update-age' },
                     ],
                 },
                 {
@@ -105,7 +110,7 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: 'end-message',
-                    message: 'Thanks! Your data was submitted successfully!',
+                    message: 'Ok mày là con chó :v!',
                     end: true,
                 },
             ]}

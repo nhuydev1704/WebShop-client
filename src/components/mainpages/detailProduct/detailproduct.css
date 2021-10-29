@@ -124,17 +124,19 @@
 
 /* css review */
 .comments h2 {
-    text-align: center;
-    border-bottom: 1px solid;
-    padding-bottom: 10px;
+    font-size: 20px;
+    line-height: 32px;
+    font-weight: 400;
+    text-transform: capitalize;
+    padding: 8px 16px;
 }
 
 .reviews {
     display: flex;
     flex-direction: row-reverse;
     width: 160px;
-    margin: 10px 0 10px 40px;
-    background-color: darkkhaki;
+    margin: 10px 0 10px 10px;
+    background-color: rgb(107, 166, 189);
     width: 120px;
     border-radius: 10px;
 }
@@ -152,40 +154,11 @@
 
 .reviews input:not(:checked) ~ label:hover,
 .reviews input:not(:checked) ~ label:hover ~ label {
-    color: crimson;
+    color: rgb(255, 239, 12);
 }
 
 .reviews input:checked ~ label {
-    color: crimson;
-}
-
-/* css input form */
-.form_input {
-    margin: 10px 0;
-}
-
-.form_input input {
-    width: 100%;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    min-height: 40px;
-    outline: none;
-    background: #ccc;
-    border-radius: 10px;
-}
-
-.form_input button {
-    background-color: #333;
-    color: white;
-    padding: 10px 0;
-    width: 150px;
-    margin: 20px 0;
-    border-radius: 8px;
-}
-
-.form_input button:hover {
-    opacity: 0.8;
+    color: rgb(255, 239, 12);
 }
 
 /* css comment */
@@ -194,17 +167,21 @@
 }
 
 .comment_card {
-    border: 1px solid #999;
+    /* border: 1px solid #999; */
     padding: 10px;
-    margin: 15px 0;
     border-radius: 5px;
-    background-color: rgb(242, 239, 239);
-    box-shadow: 1px 2px 3px;
+    font-size: 14px;
+
+    /* background-color: rgb(242, 239, 239); */
+    /* box-shadow: 1px 2px 3px; */
 }
 
-.comment_card h3 {
+.comment_card_row > div > h3 {
+    font-weight: 500;
     text-transform: capitalize;
-    color: darkblue;
+    color: rgb(51, 51, 51);
+    margin-bottom: 2px;
+    padding-right: 4px;
 }
 
 .comment_card_row {
@@ -222,7 +199,6 @@
 .comment_card p {
     color: #444;
     line-height: 1.5;
-    margin: 10px 0;
 }
 
 .comment_card .nav_comment {
@@ -231,10 +207,16 @@
 }
 
 .comment_card .nav_comment p {
-    color: orangered;
-    padding-right: 10px;
-    text-transform: capitalize;
+    margin-right: 10px;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 12px;
     cursor: pointer;
+    transition: color 0.3s;
+    margin-bottom: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .comment_card .nav_comment p:hover {
@@ -285,4 +267,44 @@
 
 .slick-slider.slick-initialized {
     width: 94vw !important;
+}
+
+[contenteditable][placeholder]:empty:before {
+    content: attr(placeholder);
+    position: absolute;
+    color: gray;
+    background-color: transparent;
+}
+
+.mar-left {
+    margin-left: 14px;
+}
+
+/* aaaa */
+.comment_card-reply::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 36px;
+    height: 20px;
+    /* background: red; */
+    border-bottom: 2px solid #ccc;
+    border-bottom-left-radius: 100px;
+    left: 0;
+}
+
+.comment_card-noreply {
+    position: relative;
+}
+
+.comment_card-noreply::after {
+    content: '';
+    display: block;
+    position: absolute;
+    height: calc(100% - 120px);
+    width: 2px;
+    background-color: #ccc;
+    top: 6%;
+    left: 0;
+    border-radius: 50%;
 }

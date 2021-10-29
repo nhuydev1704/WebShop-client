@@ -183,32 +183,40 @@ function DetailProduct() {
                 </Card>
             )}
             <Card className="comments">
-                <h2>Bình luận và đánh giá</h2>
+                <h2>Đánh Giá - Nhận Xét</h2>
 
-                <div className="reviews">
-                    <input type="radio" name="rate" id="rd-5" onChange={() => setRating(5)} />
-                    <label htmlFor="rd-5" className="fas fa-star"></label>
+                <Row gutter={[24, 24]} style={{ padding: '4px 40px' }}>
+                    <Col span={10}>
+                        <Row align="middle">
+                            <div>Đánh giá | </div>
+                            <div className="reviews">
+                                <input type="radio" name="rate" id="rd-5" onChange={() => setRating(5)} />
+                                <label htmlFor="rd-5" className="fas fa-star"></label>
 
-                    <input type="radio" name="rate" id="rd-4" onChange={() => setRating(4)} />
-                    <label htmlFor="rd-4" className="fas fa-star"></label>
+                                <input type="radio" name="rate" id="rd-4" onChange={() => setRating(4)} />
+                                <label htmlFor="rd-4" className="fas fa-star"></label>
 
-                    <input type="radio" name="rate" id="rd-3" onChange={() => setRating(3)} />
-                    <label htmlFor="rd-3" className="fas fa-star"></label>
+                                <input type="radio" name="rate" id="rd-3" onChange={() => setRating(3)} />
+                                <label htmlFor="rd-3" className="fas fa-star"></label>
 
-                    <input type="radio" name="rate" id="rd-2" onChange={() => setRating(2)} />
-                    <label htmlFor="rd-2" className="fas fa-star"></label>
+                                <input type="radio" name="rate" id="rd-2" onChange={() => setRating(2)} />
+                                <label htmlFor="rd-2" className="fas fa-star"></label>
 
-                    <input type="radio" name="rate" id="rd-1" onChange={() => setRating(1)} />
-                    <label htmlFor="rd-1" className="fas fa-star"></label>
-                </div>
+                                <input type="radio" name="rate" id="rd-1" onChange={() => setRating(1)} />
+                                <label htmlFor="rd-1" className="fas fa-star"></label>
+                            </div>
+                        </Row>
 
-                <FormInput id={id} socket={socket} rating={rating} />
-
-                <div className="comments_list">
-                    {comments.map((comment) => (
-                        <CommentItem key={comment._id} comment={comment} socket={socket} />
-                    ))}
-                </div>
+                        <FormInput id={id} socket={socket} rating={rating} />
+                    </Col>
+                    <Col span={14}>
+                        <div className="comments_list">
+                            {comments.map((comment) => (
+                                <CommentItem key={comment._id} comment={comment} socket={socket} />
+                            ))}
+                        </div>
+                    </Col>
+                </Row>
             </Card>
             {/* {loading && (
                 <div className="loading">

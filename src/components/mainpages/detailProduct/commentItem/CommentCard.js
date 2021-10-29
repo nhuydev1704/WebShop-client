@@ -1,27 +1,31 @@
-import React from 'react'
-import Rating from '../rating/Rating'
-import moment from 'moment'
+import React from 'react';
+import Rating from '../rating/Rating';
+import moment from 'moment';
 
-function CommentCard({children, comment}) {
+function CommentCard({ children, comment, reply }) {
     return (
-        <div className="comment_card">
+        <div className={reply ? 'comment_card comment_card-reply' : 'comment_card comment_card-noreply'}>
             <div className="comment_card_row">
-                <h3>{comment.username}</h3>
-                {
-                    comment.rating !== 0 && <Rating props={comment} />
-                }
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <h3>{comment.username}</h3>
+                    <div style={{ color: '#ccc' }}>
+                        <span>{new Date(comment.createdAt).toLocaleString()}</span>
+
+                        <span>{moment(comment.createdAt).fromNow()}</span>
+                    </div>
+                </div>
+                {comment.rating !== 0 && <Rating props={comment} />}
             </div>
 
-            <span>{moment(comment.createdAt).fromNow()}</span>
+            <p
+                className="mar-left"
+                style={{ textTransform: 'capitalize' }}
+                dangerouslySetInnerHTML={{ __html: comment.content }}
+            ></p>
 
-            <span>{new Date(comment.createdAt).toLocaleString()}</span>
-
-        
-            <p dangerouslySetInnerHTML={{__html: comment.content}}></p>
-        
             {children}
         </div>
-    )
+    );
 }
 
-export default CommentCard
+export default CommentCard;

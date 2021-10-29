@@ -1,83 +1,72 @@
-import React, { useEffect, useState } from 'react'
-import FormInput from '../formInput/FormInput'
-import CommentCard from './CommentCard'
+import React, { useEffect, useState } from 'react';
+import FormInput from '../formInput/FormInput';
+import CommentCard from './CommentCard';
+import { Comment, Divider } from 'antd';
 
-let showComments = []
+let showComments = [];
 
+function CommentItem({ comment, socket }) {
+    const [reply, setReply] = useState(false);
+    const [name, setName] = useState('');
 
-function CommentItem({comment,socket}) {
-    const [reply, setReply] = useState(false)
-    const [name, setName] = useState('')
-
-    const [replyComment, setReplyComment] = useState([])
-    const [hideReplyComment,setHideReplyComment] = useState([])
-    const [next, setNext] = useState(3)
+    const [replyComment, setReplyComment] = useState([]);
+    const [hideReplyComment, setHideReplyComment] = useState([]);
+    const [next, setNext] = useState(3);
 
     const loadMore = () => {
-        setNext(next + 3)
-    }
+        setNext(next + 3);
+    };
 
     useEffect(() => {
         const loopWidthSlice = () => {
-            let start = comment.reply.length - next < 0 ? 0 : comment.reply.length - next
-            showComments = comment.reply.slice(start, comment.reply.length)
-           
-            setHideReplyComment(start)
-            setReplyComment(showComments)
-        }
+            let start = comment.reply.length - next < 0 ? 0 : comment.reply.length - next;
+            showComments = comment.reply.slice(start, comment.reply.length);
 
+            setHideReplyComment(start);
+            setReplyComment(showComments);
+        };
 
-        loopWidthSlice(next)
-    },[comment.reply, next])
-
-    
+        loopWidthSlice(next);
+    }, [comment.reply, next]);
 
     const handleReply = (username) => {
-        setReply(true)
-        setName(username)
-    }
+        setReply(true);
+        setName(username);
+    };
 
     const hiddenReply = () => {
-        setReply(false)
-        setNext(3)
-    }
- 
+        setReply(false);
+        setNext(3);
+    };
+
     return (
         <>
             <CommentCard comment={comment}>
                 <div className="nav_comment">
-                    <p onClick={() => handleReply(comment.username)}>Trả lời</p>
-                    {
-                        hideReplyComment > 0 &&
-                        <p onClick={loadMore}>Xem thêm {hideReplyComment} bình luận</p>
-                    }
-                    <p onClick={hiddenReply}>Ẩn trả lời</p>
+                    <p className="mar-left" onClick={() => handleReply(comment.username)}>
+                        Trả lời
+                    </p>
+                    {hideReplyComment > 0 && <p onClick={loadMore}>Xem thêm {hideReplyComment} bình luận</p>}
+                    <p onClick={hiddenReply}>Ẩn</p>
                 </div>
 
                 <div className="reply_comment">
-                    {
-                        replyComment.map(rep => (
-                            <CommentCard comment={rep} key={rep._id}>
-                                <div className="nav_comment">
-                                    <p onClick={() => handleReply(rep.username)}>Trả lời</p>
-                                </div>
-                            </CommentCard> 
-                        ))
-                    }
+                    {replyComment.map((rep) => (
+                        <CommentCard reply comment={rep} key={rep._id}>
+                            <div className="nav_comment">
+                                <p onClick={() => handleReply(rep.username)}>Trả lời</p>
+                            </div>
+                        </CommentCard>
+                    ))}
                 </div>
 
-                {reply && 
-                    <FormInput
-                        id= {comment._id}
-                        socket={socket}
-                        name = {name}
-                        setReply={setReply}
-                        send="replyComment"
-                     />
-                } 
+                {reply && (
+                    <FormInput id={comment._id} socket={socket} name={name} setReply={setReply} send="replyComment" />
+                )}
             </CommentCard>
+            <Divider />
         </>
-    )
+    );
 }
 
-export default CommentItem
+export default CommentItem;

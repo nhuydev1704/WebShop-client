@@ -7,6 +7,9 @@ import Grid from '@mui/material/Grid';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ContextHook } from './ContextHook';
+import moment from 'moment';
+import 'moment/locale/vi'; // without this line it didn't work
+moment.locale('vi');
 
 function App() {
     const { pathname } = useLocation();

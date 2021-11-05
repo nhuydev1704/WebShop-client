@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
 
 function UserAPI(token) {
+    const { enqueueSnackbar } = useSnackbar();
+
     const [isLogged, setIsLogged] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [cart, setCart] = useState([]);
@@ -23,7 +26,7 @@ function UserAPI(token) {
                     setUserr(res.data);
                     setCart(res.data.cart);
                 } catch (err) {
-                    alert(err.response.data.msg);
+                    alert(err?.response?.data?.msg);
                 }
             };
 
@@ -32,7 +35,15 @@ function UserAPI(token) {
     }, [token]);
 
     const addCart = async (product) => {
-        if (!isLogged) return alert('Hãy đăng nhập trước khi mua sản phẩm.');
+        if (!isLogged) {
+            return enqueueSnackbar('Hãy đăng nhập trước khi mua sản phẩm', {
+                variant: 'warning',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
+        }
 
         const check = cart.every((item) => {
             return item._id !== product._id;
@@ -49,7 +60,13 @@ function UserAPI(token) {
                 }
             );
         } else {
-            alert('This product has been added to cart.');
+            enqueueSnackbar('Sản phẩm đã có trong giỏ hàng!', {
+                variant: 'warning',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            });
         }
     };
 

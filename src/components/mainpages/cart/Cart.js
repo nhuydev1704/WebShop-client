@@ -1,6 +1,6 @@
-import { Card, Col, Image, Row } from 'antd';
+import { Button, Card, Col, Divider, Image, Row } from 'antd';
 import axios from 'axios';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ContextHook } from '../../../ContextHook';
 import PaypalButton from './PaypalButton';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -8,16 +8,24 @@ import IconButton from '@mui/material/IconButton';
 import CartItem from './CartItem';
 import { useSnackbar } from 'notistack';
 import InforShip from './InforShip';
+import ReceiptBill from './billding';
+import ReactToPrint, { useReactToPrint } from 'react-to-print';
 
 function Cart() {
     const { enqueueSnackbar } = useSnackbar();
 
     const state = useContext(ContextHook);
     const [cart, setCart] = state.userAPI.cart;
+    const [userr] = state.userAPI.userr;
     const [total, setTotal] = useState(0);
     const [token] = state.token;
     const [loadingBackDrop, setLoadingBackDrop] = state.backdrop;
     const [cartCategory, setCartCategory] = useState([]);
+    const componentRef = useRef(null);
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+        onAfterPrint: (e) => handlePrintAfter(e),
+    });
 
     const addToCart = async (cart) => {
         await axios.patch(
@@ -104,7 +112,7 @@ function Cart() {
         [cart]
     );
 
-    const tranSuccess = async (payment) => {
+    const tranSuccess = useCallback(async (payment) => {
         setLoadingBackDrop(true);
         const { paymentID, address } = payment;
         const priceCheckout = total;
@@ -121,7 +129,7 @@ function Cart() {
             setCart([]);
             addToCart([]);
             setLoadingBackDrop(false);
-            enqueueSnackbar('Đặt hàng thành công', {
+            enqueueSnackbar('Thanh toán thành công', {
                 variant: 'success',
                 anchorOrigin: {
                     vertical: 'top',
@@ -138,7 +146,7 @@ function Cart() {
             });
             setLoadingBackDrop(false);
         }
-    };
+    }, []);
 
     if (cart.length === 0) {
         setLoadingBackDrop(true);
@@ -146,6 +154,23 @@ function Cart() {
     } else {
         setLoadingBackDrop(false);
     }
+
+    const exportLetter = () => {
+        handlePrint();
+
+        // getIncomeById();
+    };
+
+    async function getIncomeById() {
+        // const res = await ApiComponents.show(urlConfig.cf_url_api, rowId);
+        // setIncomeInfo(res.data);
+        handlePrint();
+    }
+
+    const handlePrintAfter = (e) => {
+        console.log('event', e);
+    };
+
     return (
         <div style={{ marginTop: '100px' }}>
             <h2 className="title_card">Giỏ hàng</h2>
@@ -193,6 +218,7 @@ function Cart() {
                                                             updateQuantity={updateQuantity}
                                                             confirm={confirm}
                                                         />
+                                                        <Divider />
                                                     </div>
                                                 ))}
                                         </Card>
@@ -211,8 +237,12 @@ function Cart() {
                         </div>
                     </div> */}
                     <InforShip tranSuccess={tranSuccess} total={total} />
+                    <div style={{ width: '100%', marginTop: '10px' }}>
+                        <Button onClick={exportLetter}>Thanh toán</Button>
+                    </div>
                 </Col>
             </Row>
+            <ReceiptBill cart={cart} total={total} userr={userr} ref={componentRef} />
         </div>
     );
 }

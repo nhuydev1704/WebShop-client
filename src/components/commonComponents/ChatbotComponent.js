@@ -16,7 +16,7 @@ const ChatbotComponet = () => {
             steps={[
                 {
                     id: '1',
-                    message: 'Tên mày là gì?',
+                    message: 'Tên bạn là gì?',
                     trigger: 'name',
                 },
                 {
@@ -26,7 +26,7 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: '3',
-                    message: 'Thằng {previousValue}! Mày giới tính gì?',
+                    message: 'Chào {previousValue}! giới tính bạn gì?',
                     trigger: 'gender',
                 },
                 {
@@ -38,7 +38,7 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: '5',
-                    message: 'Mày bao tuổi?',
+                    message: 'Bạn bao nhiêu tuổi?',
                     trigger: 'age',
                 },
                 {
@@ -59,7 +59,7 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: '7',
-                    message: 'Ok thông tin của mày là!',
+                    message: 'Thông tin của bạn là!',
                     trigger: 'review',
                 },
                 {
@@ -70,7 +70,7 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: 'update',
-                    message: 'Mày có muốn cập nhật lại thông tin?',
+                    message: 'Bạn có muốn cập nhật lại thông tin?',
                     trigger: 'update-question',
                 },
                 {
@@ -82,7 +82,7 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: 'update-yes',
-                    message: 'Mày muốn cập nhật cái gì?',
+                    message: 'Bạn muốn cập nhật thông tin gì?',
                     trigger: 'update-fields',
                 },
                 {
@@ -110,7 +110,7 @@ const ChatbotComponet = () => {
                 },
                 {
                     id: 'end-message',
-                    message: 'Ok mày là con chó :v!',
+                    message: 'Chúc bạn mua sắm vui vẻ!',
                     end: true,
                 },
             ]}

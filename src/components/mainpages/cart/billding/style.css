@@ -1,0 +1,254 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.wrapper-container {
+    display: none;
+}
+.container {
+    width: 100%;
+    font-family: serif !important;
+    min-height: 100vh;
+    background-color: #dfe6e9;
+    display: flex;
+    align-items: center;
+}
+
+.form {
+    width: 900px;
+    padding: 100px auto;
+    padding-top: 0px;
+    min-height: 500px;
+    font-family: serif !important;
+    margin: 0 auto;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+}
+.form-top {
+    width: 840px;
+    margin: 0 auto;
+    /* min-height: 100px; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.form-top_left {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+.form-top_leftItems {
+    display: flex;
+    width: 200px;
+    margin: 5px 2px 2px 0;
+}
+.form-top_leftItems h4 {
+    width: 60px;
+}
+.form-top_leftItems p {
+    margin-bottom: 4px;
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.form-top_right {
+    margin-top: 0px;
+    width: 300px;
+    text-align: center;
+}
+.form-top_right h4 {
+    margin-bottom: 0px;
+}
+.form-top_right p {
+    font-weight: 400;
+    font-size: 16px;
+    margin-bottom: 0px;
+}
+.form-body {
+    margin: 0 auto;
+    width: 840px;
+    display: flex;
+    flex-direction: column;
+}
+.form-body_title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.form-body_title h2 {
+    margin-bottom: 0px;
+}
+.form-body_title p {
+    /* width:  */
+    display: flex;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+.form-body_title p span {
+    /* margin-bottom: 5px; */
+    width: 40px;
+}
+.infor_form {
+    margin: 0 auto;
+    width: 840px;
+    display: flex;
+    justify-content: flex-end;
+}
+.list_infor ul {
+    list-style: none;
+    margin-bottom: 0px !important;
+}
+.list_infor ul li {
+    width: 200px;
+    overflow: hidden;
+    display: flex;
+}
+.list_infor ul li p {
+    flex: 1;
+    margin-bottom: 6px !important;
+    margin-left: 2px;
+}
+
+.dottedLines {
+    border-bottom: 2px dotted black;
+}
+.form-type {
+    margin: 0 auto;
+    width: 840px;
+    display: flex;
+    flex-direction: column;
+}
+.form_type-item {
+    width: 840px;
+    display: flex;
+}
+
+.form_type-item > h4 {
+    margin-bottom: 4px;
+}
+
+.form_type-item .amount {
+    width: 450px;
+    display: flex;
+}
+.form_type-item .amount-type {
+    width: 450px;
+    display: flex;
+}
+.amount-type h4 {
+    width: 130px;
+}
+.amount-type p {
+    max-width: 300px;
+    word-wrap: break-word;
+}
+.form_type-item p {
+    margin-bottom: 11px;
+    flex: 1;
+}
+.date_created {
+    width: 840px;
+    margin: 5px auto;
+    display: flex;
+    justify-content: flex-end;
+}
+.date_created p {
+    display: flex;
+    font-weight: 600;
+}
+.date_created p span {
+    width: 30px;
+    text-align: center;
+}
+.signature {
+    width: 840px;
+    height: 110px;
+    /* margin: 20px auto; */
+    display: flex;
+}
+
+.signature-item {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 90px !important;
+    max-height: 120px;
+    justify-content: space-between;
+}
+
+.signature-item > div {
+    height: 60px;
+}
+
+.signature-item span {
+    line-height: 90px;
+    font-family: 'Segoe Script', Courier, monospace;
+    display: block;
+    padding-top: 26px;
+}
+
+.signature-item h4 {
+    margin-bottom: 3px !important;
+}
+
+.signature-item p {
+    margin-bottom: 0px;
+}
+
+.confirm {
+    width: 840px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding-top: 35px;
+}
+
+body > .wrapper-container {
+    display: block;
+}
+
+@media print {
+    .wrapper-container {
+        display: block;
+        /* background-color: green; */
+    }
+}
+
+.form-top_left > h2 {
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+}
+
+.form-top_left > p {
+    font-family: 'papyrus', Courier, monospace;
+}
+
+.form-top_left > h2 > span {
+    color: #111;
+    font-family: 'Brush Script Std', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1;
+    display: block;
+    position: absolute;
+    bottom: 6%;
+    left: 68%;
+    transform: translateX(-50%);
+}
+
+.form-top_left > h2 > img {
+    height: 60%;
+    width: 60%;
+    border-radius: 50%;
+    object-fit: cover;
+}

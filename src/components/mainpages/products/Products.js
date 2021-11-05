@@ -17,12 +17,14 @@ import Skeleton from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ContextHook } from '../../../ContextHook';
 import ProductItem from '../ultils/ProductItem/ProductItem';
 import FilterCategory from './FilterCategory';
 import FilterSort from './FilterSort';
+import LoadMore from './LoadMore';
+
 const drawerWidth = 240;
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -33,6 +35,9 @@ function Products() {
     const [products, setProducts] = state.productsAPI.products;
     const [openDrawer, setOpenDrawer] = state.drawer;
     const [isAdmin] = state.userAPI.isAdmin;
+    const [page, setPage] = state.productsAPI.page;
+    const addCart = state.userAPI.addCart;
+
     const [token] = state.token;
     const [callback, setCallback] = state.productsAPI.callback;
     const [loadingProduct, setLoadingProduct] = state.productsAPI.loading;
@@ -130,6 +135,10 @@ function Products() {
         ...theme.mixins.toolbar,
         justifyContent: 'flex-end',
     }));
+
+    useEffect(() => {
+        setPage(1);
+    }, []);
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -233,14 +242,13 @@ function Products() {
                             <Grid key={index} item lg={3} xl={3} md={4} sm={6} xs={12}>
                                 {product ? (
                                     <Item className="item_product">
-                                        <Link to={`/detail/${product._id}`}>
-                                            <ProductItem
-                                                product={product}
-                                                isAdmin={isAdmin}
-                                                deleteProduct={deleteProduct}
-                                                handleChangeInput={handleChangeInput}
-                                            />
-                                        </Link>
+                                        <ProductItem
+                                            product={product}
+                                            isAdmin={isAdmin}
+                                            deleteProduct={deleteProduct}
+                                            handleChangeInput={handleChangeInput}
+                                            addCart={addCart}
+                                        />
                                     </Item>
                                 ) : (
                                     <Box sx={{ width: 210, marginRight: 0.5, my: 5 }}>
@@ -256,6 +264,8 @@ function Products() {
                         );
                     })}
                 </Grid>
+                <LoadMore />
+
                 {products.length === 0 && <div style={{ textAlign: 'center' }}>Chưa có sản phẩm!</div>}
             </Main>
 
@@ -268,9 +278,6 @@ function Products() {
              <Filter /> 
                 
             )} */}
-
-            {/* <LoadMore />
-            {products.length === 0 && <Loading />} */}
         </Box>
     );
 }

@@ -6,9 +6,9 @@ function Rating({ props }) {
     const { pathname } = useLocation();
 
     if (props.numReviews) {
-        rate = 100 - (props.rating / props.numReviews) * 18;
+        rate = 100 - (props.rating / props.numReviews) * 20;
     } else {
-        rate = 100 - props.rating * 15;
+        rate = 100 - props.rating * 20;
     }
 
     const style_star = {
@@ -18,7 +18,7 @@ function Rating({ props }) {
     return (
         <div className="rating">
             {pathname !== '/' && !isNaN(props.rating / props.numReviews) && (
-                <span>{props.rating / props.numReviews}</span>
+                <span>{(props.rating / props.numReviews).toFixed(1)}</span>
             )}
             <div className="star">
                 <i className="far fa-star"></i>

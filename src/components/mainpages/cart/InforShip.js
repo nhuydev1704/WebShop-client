@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Row } from 'antd';
+import { Button, Card, Col, Divider, Row } from 'antd';
 import React from 'react';
 import { numberWithCommas } from '../../../commonFunction/NumberFortmat';
 import PaypalButton from './PaypalButton';
@@ -36,4 +36,4 @@ const InforShip = ({ tranSuccess, total }) => {
     );
 };
 
-export default InforShip;
+export default React.memo(InforShip);

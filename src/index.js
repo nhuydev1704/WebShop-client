@@ -13,20 +13,18 @@ import ChatbotComponet from './components/commonComponents/ChatbotComponent';
 ReactDOM.render(
     <React.StrictMode>
         <Router>
-            <DataProvider>
-                <SnackbarProvider
-                    maxSnack={3}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                >
-                    <DataProvider>
-                        <App />
-                        <ChatbotComponet />
-                    </DataProvider>
-                </SnackbarProvider>
-            </DataProvider>
+            <SnackbarProvider
+                maxSnack={3}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+            >
+                <DataProvider>
+                    <App />
+                    <ChatbotComponet />
+                </DataProvider>
+            </SnackbarProvider>
         </Router>
     </React.StrictMode>,
     document.getElementById('root')

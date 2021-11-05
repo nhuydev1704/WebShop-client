@@ -113,3 +113,17 @@
 .checkbox_product {
     float: right;
 }
+
+button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-colorPrimary.MuiIconButton-sizeMedium.icon_add-cart.css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root {
+    position: absolute;
+    top: 2%;
+    right: 4%;
+    display: none;
+    z-index: 999;
+}
+
+.item_product:hover
+    > div
+    > button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-colorPrimary.MuiIconButton-sizeMedium.icon_add-cart.css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root {
+    display: block;
+}

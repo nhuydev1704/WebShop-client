@@ -10,23 +10,30 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
+import { styled, alpha } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ContextHook } from '../../../ContextHook';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+import SearchComponent from './SearchComponent';
 const drawerWidth = 240;
+
 function Header() {
     const state = useContext(ContextHook);
     const [isLogged] = state.userAPI.isLogged;
     const [isAdmin] = state.userAPI.isAdmin;
+    const [search, setSearch] = state.productsAPI.search;
     const [cart] = state.userAPI.cart;
     const [userr] = state.userAPI.userr;
     const [openDrawer, setOpenDrawer] = state.drawer;
     const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const { pathname } = useLocation();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -182,6 +189,9 @@ function Header() {
                                 <Link to="/">{isAdmin ? 'Admin' : 'SHOPC4'}</Link>
                             </div>
                         </Typography>
+
+                        {pathname === '/' && <SearchComponent />}
+
                         {isLogged ? (
                             userLink()
                         ) : (
@@ -205,4 +215,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default React.memo(Header);

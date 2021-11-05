@@ -29,6 +29,7 @@ const listIcon = [
 const FilterCategory = () => {
     const state = useContext(ContextHook);
     const [category, setCategory] = state.productsAPI.category;
+    const [search, setSearch] = state.productsAPI.search;
     const [categories] = state.categoriesAPI.categories;
     const [value, setValue] = React.useState(0);
 
@@ -44,11 +45,11 @@ const FilterCategory = () => {
     };
 
     const handleFilterCategory = (id) => {
-        console.log(id);
         if (id === '') {
             setCategory('');
         } else {
             setCategory('category=' + id);
+            setSearch('');
         }
     };
 

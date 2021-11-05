@@ -31,26 +31,9 @@
 /* Load */
 
 .load_more {
-    text-align: center;
-}
-
-.load_more button {
-    padding: 10px 25px;
-    margin-bottom: 20px;
-    border: 1px solid #555;
-    text-transform: capitalize;
-    font-weight: 500;
-    line-height: 12px;
-    background-color: #83c5b4;
-    font-weight: 500;
-    color: black;
-    border-radius: 6px;
-}
-
-.load_more button:hover {
-    opacity: 0.8;
-    color: white;
-    background-color: #333;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 select {
@@ -66,6 +49,8 @@ select {
 }
 
 .item_product {
+    padding: 20px 10px !important;
+    position: relative;
 }
 
 .item_product:hover {

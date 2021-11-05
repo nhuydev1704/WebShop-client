@@ -1,3 +1,4 @@
+import Button from '@mui/material/Button';
 import React, { useContext } from 'react';
 import { ContextHook } from '../../../ContextHook';
 
@@ -8,7 +9,13 @@ function LoadMore() {
 
     return (
         <div className="load_more">
-            {result < page * 8 ? '' : <button onClick={() => setPage(page + 1)}>Tải thêm</button>}
+            {result < page * 8 ? (
+                ''
+            ) : (
+                <Button variant="contained" onClick={() => setPage(page + 1)}>
+                    Tải thêm
+                </Button>
+            )}
         </div>
     );
 }

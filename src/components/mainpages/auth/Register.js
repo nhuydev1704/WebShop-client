@@ -80,12 +80,6 @@ function Register() {
 
         try {
             const createdAt = new Date().toISOString();
-            socket.emit('createNotification', {
-                name,
-                action: 'register',
-                createdAt,
-            });
-
             const res = await axios.post('/user/register', {
                 name,
                 email,
